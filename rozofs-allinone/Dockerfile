@@ -1,8 +1,8 @@
 # Set RozoFS all-in-one container
 
-# Use rozofs-base image provided by denaitre
-FROM denaitre/rozofs-base
-MAINTAINER denaitre, dimitri.pertin@univ-nantes.fr
+# Use rozofs-base image provided by kvaps
+FROM kvaps/rozofs-base
+MAINTAINER kvaps, kvapss@gmail.com
 
 ENV DEBIAN_FRONTEND noninteractive
 # Allow services to start after installation

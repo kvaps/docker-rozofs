@@ -23,7 +23,7 @@ function start_exportd()
     docker run -P \
                ${LINK_ARG[@]} \
                --name ${name} \
-               -d denaitre/rozofs-exportd > /dev/null 2>&1
+               -d kvaps/rozofs-exportd > /dev/null 2>&1
                #--privileged \
 
     exportdIP=$(getIPbyContainerName "rozofs-exportd")
@@ -147,7 +147,7 @@ for ROZOFS_SID in $(eval echo "{1..${DOCKER_ROZOFS_CLUSTER_SIZE}}"); do
     # CID is kept in order to retrieve containers IP address (or not...)
     CID=$(docker run -P \
                --name ${name} \
-               -d denaitre/rozofs-storaged )
+               -d kvaps/rozofs-storaged )
                 # > /dev/null 2>&1)
 
     # This array contains the list of 'link' parameters of each storaged

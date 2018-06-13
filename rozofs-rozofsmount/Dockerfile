@@ -3,9 +3,9 @@
 # Installs rozofs-storaged following the instructions from:
 # http://rozofs.github.io/rozofs/master/InstallingRozoFS.html
 
-# Based on the rozofs-base image provided by denaitre
-FROM denaitre/rozofs-base
-MAINTAINER denaitre, dimitri.pertin@univ-nantes.fr
+# Based on the rozofs-base image provided by kvaps
+FROM kvaps/rozofs-base
+MAINTAINER kvaps, kvapss@gmail.com
 
 # Installation:
 # Make sure the package repository is up to date before installing storaged

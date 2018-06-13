@@ -19,4 +19,4 @@ exportdIP=$(docker inspect -f \
 docker run -e "DOCKER_ROZOFS_EXPORTD_IP=${exportdIP}" \
            --name "rozofs-client$(printf '%02g' $(( $i + 1 )))" \
            --privileged \
-           -d "denaitre/rozofs-rozofsmount"
+           -d "kvaps/rozofs-rozofsmount"

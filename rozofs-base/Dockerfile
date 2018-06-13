@@ -2,7 +2,7 @@
 
 # Use the debian base image provided on Docker Hub
 FROM debian:jessie
-MAINTAINER denaitre, dimitri.pertin@univ-nantes.fr
+MAINTAINER kvaps, kvapss@gmail.com
 
 # Make sure the package repository is up to date and install required packages
 RUN apt-get -y update && apt-get install -y \
