@@ -14,7 +14,7 @@ RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/01norecommend \
  && apt-get -y update \
  && apt-get install -y rozofs-storaged busybox
 
-ADD rozofs-storaged.sh /
+ADD rozofs-storaged.sh rozofs-agent.sh /
 
 # Expose port 51000 from the container to the host
 # storio, the storaged sub-process requires to expose port 41001 to
