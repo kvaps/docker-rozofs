@@ -4,7 +4,7 @@ if [ ! -f /etc/rozofs/rozofs.conf ]; then
   touch /etc/rozofs/rozofs.conf
 fi
 if [ ! -f /etc/rozofs/storaged.conf ]; then
-  echo 'listen=({addr="*";port=41001;});storages=();' > /etc/rozofs/storaged.conf
+  echo 'listen=({addr="*";port=41001;});storages=();' > /etc/rozofs/storage.conf
 fi
 
 /bin/busybox syslogd
