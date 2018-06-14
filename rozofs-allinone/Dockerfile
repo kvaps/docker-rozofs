@@ -9,22 +9,13 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 
 # Make sure the package repository is up to date
-RUN apt-get -y update && apt-get install -y \
-    rozofs-*
+RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/01norecommend \
+ && echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/01norecommend \
+ && apt-get -y update \
+ && apt-get install -y rozofs-* busybox
 
-# Add two script:
-#       * bootstrap.sh required for image building
-#       * rozofs.sh required for container booting
-ADD bootstrap.sh /tmp/bootstrap.sh
-ADD rozofs.sh /tmp/rozofs.sh
-RUN chmod +x /tmp/bootstrap.sh
-RUN chmod +x /tmp/rozofs.sh
-
-ENV ROZO_EXPORT_HOSTNAME localhost
-          
-RUN /tmp/bootstrap.sh
+ADD rozofs-agent.sh /
 
 EXPOSE 50027 51000 50028 41001 50000 53000 52000 50003 50004
 
-CMD /tmp/rozofs.sh && tail -F /var/log/dmesg
-
+ENTRYPOINT [ "/rozofs-agent.sh" ]
