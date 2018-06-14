@@ -1,12 +1,26 @@
-#!/bin/bash
+#!/bin/sh
 
-echo "Set the rozofs-storaged configuration file"
+if [ ! -f /etc/rozofs/rozofs.conf ]; then
+  touch /etc/rozofs/rozofs.conf
+fi
+if [ ! -f /etc/rozofs/storaged.conf ]; then
+  echo 'listen=({addr="*";port=41001;});storages=();' > /etc/rozofs/storaged.conf
+fi
 
-DOCKER_ROZOFS_CLUSTER_ID=${DOCKER_ROZOFS_CLUSTER_ID:=1}
-DOCKER_ROZOFS_STORAGE_ID=${DOCKER_ROZOFS_STORAGE_ID:=1}
+/bin/busybox syslogd
+/sbin/rpcbind
+/usr/bin/storaged "$@"
+EXIT_CODE=$?
 
-sed -i "s/cidToDefine/${DOCKER_ROZOFS_CLUSTER_ID}/" /etc/rozofs/storage.conf
-sed -i "s/sidToDefine/${DOCKER_ROZOFS_STORAGE_ID}/" /etc/rozofs/storage.conf
+if [ "$EXIT_CODE" -ne "0" ]; then
+  cat /var/log/messages
+  exit $EXIT_CODE
+fi
 
-echo "Start rozofs-storaged service"
-storaged
+PID=$(pgrep -fn "^/usr/bin/storaged $*&")
+if [ -n "$PID" ]; then
+  for i in `seq 1 15`; do
+    trap "kill -s $i $PID; wait \$!" $i
+  done
+  tail -n0 --pid=$PID -f /var/log/messages & wait $!
+fi

@@ -9,12 +9,18 @@ MAINTAINER kvaps, kvapss@gmail.com
 
 # Installation:
 # Make sure the package repository is up to date before installing storaged
-RUN apt-get -y update && apt-get install -y \
-    rozofs-storaged
+RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/01norecommend \
+ && echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/01norecommend \
+ && apt-get -y update \
+ && apt-get install -y rozofs-storaged busybox
+ #&& apt-get install -y rozofs-storaged rsyslog \
+ #&& sed -i 's/^$ModLoad imklog/#$ModLoad imklog/g' /etc/rsyslog.conf
+
+ADD rozofs-storaged.sh /
 
 # Expose port 51000 from the container to the host
 # storio, the storaged sub-process requires to expose port 41001 to
 # be linked to stocli (sub-process of rozofsmount)
 EXPOSE 51000 41001
 
-CMD rozo agent restart && tail -f /var/log/dmesg
+ENTRYPOINT [ "/rozofs-storaged.sh" ]
