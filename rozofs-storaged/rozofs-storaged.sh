@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# restore configs
 if [ ! -f /etc/rozofs/rozofs.conf ]; then
   touch /etc/rozofs/rozofs.conf
 fi
@@ -7,15 +8,14 @@ if [ ! -f /etc/rozofs/storaged.conf ]; then
   echo 'listen=({addr="*";port=41001;});storages=();' > /etc/rozofs/storage.conf
 fi
 
+# start logging
 /bin/busybox syslogd
-/usr/bin/storaged "$@"
-EXIT_CODE=$?
+tail -f /var/log/messages &
 
-if [ "$EXIT_CODE" -ne "0" ]; then
-  cat /var/log/messages
-  exit $EXIT_CODE
-fi
+# start daemon
+/usr/bin/storaged "$@" || exit $?
 
+# wait for process
 PID=$(pgrep -fn "^/usr/bin/storaged")
 if [ -n "$PID" ]; then
   for i in `seq 1 15`; do
