@@ -10,7 +10,7 @@ fi
 
 # start logging
 /bin/busybox syslogd
-tail -f /var/log/messages &
+tail -F /var/log/messages 2>/dev/null &
 
 # start daemon
 /usr/bin/storaged "$@" || exit $?
