@@ -1,5 +1,4 @@
 #!/bin/sh
-set -x
 
 if [ ! -f /etc/rozofs/rozofs.conf ]; then
   touch /etc/rozofs/rozofs.conf
@@ -17,7 +16,7 @@ if [ "$EXIT_CODE" -ne "0" ]; then
   exit $EXIT_CODE
 fi
 
-PID=$(pgrep -fn "^/usr/bin/exportd $*&")
+PID=$(pgrep -fn "^/usr/bin/exportd")
 if [ -n "$PID" ]; then
   for i in `seq 1 15`; do
     trap "kill -s $i $PID; wait \$!" $i

@@ -13,8 +13,6 @@ RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/01norecommend \
  && echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/01norecommend \
  && apt-get -y update \
  && apt-get install -y rozofs-storaged busybox
- #&& apt-get install -y rozofs-storaged rsyslog \
- #&& sed -i 's/^$ModLoad imklog/#$ModLoad imklog/g' /etc/rsyslog.conf
 
 ADD rozofs-storaged.sh /
 

@@ -16,7 +16,7 @@ if [ "$EXIT_CODE" -ne "0" ]; then
   exit $EXIT_CODE
 fi
 
-PID=$(pgrep -fn "^/usr/bin/storaged $*&")
+PID=$(pgrep -fn "^/usr/bin/storaged")
 if [ -n "$PID" ]; then
   for i in `seq 1 15`; do
     trap "kill -s $i $PID; wait \$!" $i
