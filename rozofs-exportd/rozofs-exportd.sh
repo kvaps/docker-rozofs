@@ -1,16 +1,26 @@
-#!/bin/bash
+#!/bin/sh
 
-echo "Restart rpcbind and rozo agent"
+if [ ! -f /etc/rozofs/rozofs.conf ]; then
+  touch /etc/rozofs/rozofs.conf
+fi
+if [ ! -f /etc/rozofs/exportd.conf ]; then
+  echo 'layout=0;volumes=();exports=();' > /etc/rozofs/exportd.conf
+fi
 
-service rpcbind restart
+/bin/busybox syslogd
+/sbin/rpcbind
+/usr/bin/exportd "$@"
+EXIT_CODE=$?
 
-echo "Restart rozo agent"
+if [ "$EXIT_CODE" -ne "0" ]; then
+  cat /var/log/messages
+  exit $EXIT_CODE
+fi
 
-rozo agent restart
-
-echo "Start the rozofs-exportd service"
-#exportd
-
-echo "Keep the container alive"
-
-tail -f /var/log/dmesg
+PID=$(pgrep -fn "^/usr/bin/exportd $*&")
+if [ -n "$PID" ]; then
+  for i in `seq 1 15`; do
+    trap "kill -s $i $PID; wait \$!" $i
+  done
+  tail -n0 --pid=$PID -f /var/log/messages & wait $!
+fi
