@@ -1,4 +1,5 @@
 #!/bin/sh
+set -x
 
 if [ ! -f /etc/rozofs/rozofs.conf ]; then
   touch /etc/rozofs/rozofs.conf
@@ -8,7 +9,6 @@ if [ ! -f /etc/rozofs/exportd.conf ]; then
 fi
 
 /bin/busybox syslogd
-/sbin/rpcbind
 /usr/bin/exportd "$@"
 EXIT_CODE=$?
 

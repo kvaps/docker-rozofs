@@ -8,7 +8,6 @@ if [ ! -f /etc/rozofs/storaged.conf ]; then
 fi
 
 /bin/busybox syslogd
-/sbin/rpcbind
 /usr/bin/storaged "$@"
 EXIT_CODE=$?
 
