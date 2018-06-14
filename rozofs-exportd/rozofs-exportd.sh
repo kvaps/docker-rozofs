@@ -4,7 +4,7 @@ if [ ! -f /etc/rozofs/rozofs.conf ]; then
   touch /etc/rozofs/rozofs.conf
 fi
 if [ ! -f /etc/rozofs/exportd.conf ]; then
-  echo 'layout=0;volumes=();exports=();' > /etc/rozofs/exportd.conf
+  echo 'layout=0;volumes=();exports=();' > /etc/rozofs/export.conf
 fi
 
 /bin/busybox syslogd
