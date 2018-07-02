@@ -1,6 +1,8 @@
 #!/bin/bash
 
 start_daemons() {
+  # restore fstab
+  cp -f /etc/rozofs/fstab /etc/fstab
   # start rozo agent
   /etc/init.d/rozofs-manager-agent start
   # start rozo export
@@ -20,6 +22,9 @@ start_daemons() {
 }
 
 stop_daemons() {
+  # save fstab
+  cp -f /etc/fstab /etc/rozofs/fstab.bak
+  mv /etc/rozofs/fstab.bak /etc/rozofs/fstab
   awk '$1 == "rozofsmount" {print $2}' /etc/fstab |
     while read mount; do
       umount "$mount"
