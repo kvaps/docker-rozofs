@@ -1,9 +1,0 @@
-#!/bin/bash
-
-DOCKER_ROZOFS_EXPORTD_IP=${DOCKER_ROZOFS_EXPORTD_IP:="172.17.0.6"}
-DOCKER_ROZOFS_EXPORTD_PATH=${DOCKER_ROZOFS_EXPORTD_PATH:="/srv/rozofs/exports/export_1"}
-MOUNTPOINT_PATH="/mnt/rozofs"
-
-echo "Start rozofs-rozofsmount"
-rozofsmount -H ${DOCKER_ROZOFS_EXPORTD_IP} -E ${DOCKER_ROZOFS_EXPORTD_PATH} \
-    ${MOUNTPOINT_PATH}

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: rozofs
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: rozofs
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: rozofs
+    spec:
+      hostNetwork: true
+
+      initContainers:
+      - name: init
+        image: kvaps/rozofs:latest
+        command:
+        - /bin/sh
+        - -c
+        - |
+            systemctl start rpcbind.service
+            for config in rozofs.conf export.conf storage.conf; do
+              if [ ! -f /host-etc/rozofs/$config ]; then
+                cp /etc/rozofs/$config /host-etc/rozofs/$config
+              fi
+            done
+        volumeMounts:
+        - name: config
+          mountPath: /host-etc/rozofs
+        - name: systemd-run
+          mountPath: /var/run/systemd
+
+      containers:
+      - name: rozofs
+        image: kvaps/rozofs:latest
+        volumeMounts:
+        - name: config
+          mountPath: /etc/rozofs
+        - name: data
+          mountPath: /srv/rozofs
+        securityContext:
+          privileged: true
+    
+      volumes:
+      - name: config
+        hostPath:
+          path: /data/local/config/rozofs
+      - name: data
+        hostPath:
+          path: /data/local/data/rozofs
+      - name: systemd-run
+        hostPath:
+          path: /var/run/systemd
