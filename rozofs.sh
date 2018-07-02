@@ -11,9 +11,19 @@ start_daemons() {
   if [ "$(grep -c 'storages *= *( *) *;' /etc/rozofs/storage.conf)" != "1" ]; then
     /etc/init.d/rozofs-storaged start
   fi
+  # start rozo mounts
+  awk '$1 == "rozofsmount" {print $2}' /etc/fstab |
+    while read mount; do
+      mkdir -p "$mount"
+      mount "$mount"
+    done
 }
 
 stop_daemons() {
+  awk '$1 == "rozofsmount" {print $2}' /etc/fstab |
+    while read mount; do
+      umount "$mount"
+    done
   /etc/init.d/rozofs-storaged stop
   /etc/init.d/rozofs-exportd stop
   /etc/init.d/rozofs-manager-agent stop
