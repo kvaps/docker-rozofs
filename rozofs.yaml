@@ -43,6 +43,9 @@ spec:
           mountPath: /etc/rozofs
         - name: data
           mountPath: /srv/rozofs
+        - name: mnt
+          mountPath: /mnt
+          mountPropagation: Bidirectional
         securityContext:
           privileged: true
     
@@ -56,3 +59,6 @@ spec:
       - name: systemd-run
         hostPath:
           path: /var/run/systemd
+      - name: mnt
+        hostPath:
+          path: /mnt
