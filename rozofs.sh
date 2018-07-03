@@ -40,4 +40,10 @@ tail -F /var/log/messages 2>/dev/null &
 
 trap stop_daemons EXIT
 start_daemons
+
+while inotifywait -e modify /etc/fstab; do
+  cp -f /etc/fstab /etc/rozofs/fstab.bak
+  mv /etc/rozofs/fstab.bak /etc/rozofs/fstab
+done &
+
 wait $!

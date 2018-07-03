@@ -8,10 +8,8 @@ RUN chmod +x /tini
 ENTRYPOINT ["/tini", "--"]
 
 # Make sure the package repository is up to date and install required packages
-RUN apt-get -y update && apt-get install -y \
-    wget \
-    lsb-release \
-    gnupg
+RUN apt-get -y update \
+ && apt-get install -y wget lsb-release gnupg
 
 # Avoid warning during packet installations
 ENV DEBIAN_FRONTEND noninteractive
@@ -29,7 +27,7 @@ RUN wget -O - http://dl.rozofs.org/deb/devel@rozofs.com.gpg.key | apt-key add - 
 RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/01norecommend \
  && echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/01norecommend \
  && apt-get -y update \
- && apt-get install -y rozofs-* busybox
+ && apt-get install -y rozofs-* busybox inotify-tools
 
 ADD rozofs.sh /
 CMD [ "/rozofs.sh" ]
