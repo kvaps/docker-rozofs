@@ -27,7 +27,9 @@ RUN wget -O - http://dl.rozofs.org/deb/devel@rozofs.com.gpg.key | apt-key add - 
 RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/01norecommend \
  && echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/01norecommend \
  && apt-get -y update \
- && apt-get install -y rozofs-* busybox inotify-tools
+ && apt-get install -y rozofs-* busybox inotify-tools \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists
 
 ADD rozofs.sh /
 CMD [ "/rozofs.sh" ]
